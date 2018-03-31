@@ -15,6 +15,12 @@ class DataSourceManager:
     def add_source(self, source):
         self.sources.append(source)
 
+    def get_source(self, name):
+        for source in self.sources:
+            if source.name == name:
+                return source
+        return None
+
     def all_sources(self):
         return self.sources[:]
 

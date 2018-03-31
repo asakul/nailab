@@ -1,6 +1,8 @@
 
 from nailab.data.datasource import DataSource
 
+from naiback.data.feeds.genericcsvfeed import GenericCSVFeed
+
 import glob
 import os
 
@@ -14,12 +16,17 @@ class CsvFolderDataSource(DataSource):
         self._discover_feeds()
 
     def available_feeds(self):
-        return self.feeds
+        return [f[1] for f in self.feeds]
 
     def get_feed(self, feed_id):
-        pass
+        for path, f_id in self.feeds:
+            if f_id == feed_id:
+                with open(path, 'r') as f:
+                    return GenericCSVFeed(f)
+        raise NailabError('Unable to obtain feed: {}'.format(feed_id))
+
 
     def _discover_feeds(self):
         files = glob.glob(self.path + '/*.csv')
-        self.feeds = [os.path.basename(f) for f in files]
+        self.feeds = [(f, os.path.basename(f)) for f in files]
 
