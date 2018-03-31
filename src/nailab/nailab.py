@@ -5,7 +5,7 @@ gi.require_version('GtkSource', '3.0')
 from gi.repository import Gtk, GObject
 from gi.repository import GtkSource
 
-from ui.applicationwindow import ApplicationWindow
+from nailab.ui.applicationwindow import ApplicationWindow
 
 def main():
     GObject.type_register(GtkSource.View)

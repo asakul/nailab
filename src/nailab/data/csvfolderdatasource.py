@@ -10,8 +10,8 @@ class CsvFolderDataSource(DataSource):
         super().__init__(name)
 
         self.path = path
-        self._discover_feeds()
         self.feeds = []
+        self._discover_feeds()
 
     def available_feeds(self):
         return self.feeds
