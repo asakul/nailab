@@ -9,6 +9,7 @@ class TabManager(GObject.Object):
         super().__init__()
         self.notebook = notebook
         self.widgets = {}
+        self.source_controllers = {}
         self.id_counter = 1
         self.source_paths = {}
 
@@ -39,6 +40,7 @@ class TabManager(GObject.Object):
             self.source_paths[tab_id] = source_file
             (sv, sv_controller) = self._init_sourceeditor()
             sv_controller.set_source_text(f.read())
+            self.source_controllers[tab_id] = sv_controller
             self.widgets[tab_id] = sv
             sv.show_all()
             header = Gtk.HBox()
@@ -64,6 +66,8 @@ class TabManager(GObject.Object):
         del self.widgets[tab_id]
         if tab_id in self.source_paths:
             del self.source_paths[tab_id]
+        if tab_id in self.source_controllers:
+            del self.source_controllers[tab_id]
 
     def get_current_source_path(self):
         index = self.notebook.get_current_page()
@@ -73,6 +77,17 @@ class TabManager(GObject.Object):
                 return self.source_paths[k]
 
         return None
+
+    def save_current(self):
+        index = self.notebook.get_current_page()
+        w = self.notebook.get_nth_page(index)
+        for k, v in self.widgets.items():
+            if v == w:
+                text = self.source_controllers[k].get_source_text()
+                with open(self.source_paths[k], 'w') as f:
+                    f.write(text)
+
+
 
     def _init_sourceeditor(self):
         scroll = Gtk.ScrolledWindow()

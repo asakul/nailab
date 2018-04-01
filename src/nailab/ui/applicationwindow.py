@@ -19,6 +19,7 @@ class ApplicationWindow:
         handlers = {
                 'on_ApplicationWindow_delete_event' : Gtk.main_quit,
                 'on_OpenFile' : self.open_file,
+                'on_menuSave' : self.save_file,
                 'on_StrategyExecute' : self.strategy_execute
                 }
 
@@ -35,6 +36,9 @@ class ApplicationWindow:
             self.tab_manager.new_tab(dlg.get_filename())
 
         dlg.destroy()
+
+    def save_file(self, arg):
+        self.tab_manager.save_current()
 
     def strategy_execute(self, arg):
         sel = self.tv_datasources.get_selection()
