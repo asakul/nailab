@@ -87,7 +87,14 @@ class TabManager(GObject.Object):
                 with open(self.source_paths[k], 'w') as f:
                     f.write(text)
 
-
+    def save_current_as(self, path):
+        index = self.notebook.get_current_page()
+        w = self.notebook.get_nth_page(index)
+        for k, v in self.widgets.items():
+            if v == w:
+                text = self.source_controllers[k].get_source_text()
+                with open(path, 'w') as f:
+                    f.write(text)
 
     def _init_sourceeditor(self):
         scroll = Gtk.ScrolledWindow()

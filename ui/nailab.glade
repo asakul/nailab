@@ -125,12 +125,13 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkImageMenuItem" id="imagemenuitem24">
+                      <object class="GtkImageMenuItem" id="menuSaveAs">
                         <property name="label">gtk-save-as</property>
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
+                        <signal name="activate" handler="on_menuSaveAs" swapped="no"/>
                       </object>
                     </child>
                     <child>

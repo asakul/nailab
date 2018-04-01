@@ -20,6 +20,7 @@ class ApplicationWindow:
                 'on_ApplicationWindow_delete_event' : Gtk.main_quit,
                 'on_OpenFile' : self.open_file,
                 'on_menuSave' : self.save_file,
+                'on_menuSaveAs' : self.save_file_as,
                 'on_StrategyExecute' : self.strategy_execute
                 }
 
@@ -39,6 +40,17 @@ class ApplicationWindow:
 
     def save_file(self, arg):
         self.tab_manager.save_current()
+
+    def save_file_as(self, arg):
+        dlg = Gtk.FileChooserDialog('Save file', self.window, Gtk.FileChooserAction.SAVE,
+                (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                 Gtk.STOCK_SAVE, Gtk.ResponseType.OK))
+        result = dlg.run()
+
+        if result == Gtk.ResponseType.OK:
+            self.tab_manager.save_current_as(dlg.get_filename())
+
+        dlg.destroy()
 
     def strategy_execute(self, arg):
         sel = self.tv_datasources.get_selection()
