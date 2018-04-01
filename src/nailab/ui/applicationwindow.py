@@ -5,6 +5,7 @@ from nailab.data.datasource import DataSource
 from nailab.data.datasourcemanager import DataSourceManager
 from nailab.execution.executor import Executor
 
+from .resultstable import ResultsTableWidget
 from .tabmanager import TabManager
 
 class ApplicationWindow:
@@ -48,7 +49,15 @@ class ApplicationWindow:
                 feeds.append(feed)
 
         e = Executor()
-        e.execute_from_file(self.tab_manager.get_current_source_path(), feeds)
+        result = e.execute_from_file(self.tab_manager.get_current_source_path(), feeds)
+
+        self._add_results_page(result)
+
+    def _add_results_page(self, results):
+        res_widget = ResultsTableWidget()
+        res_widget.set_results(results)
+        res_widget.show_all()
+        self.tab_manager.new_misc_tab(res_widget)
 
     def _init_tv_datasource(self, builder):
         self.datasourcemanager = DataSourceManager()

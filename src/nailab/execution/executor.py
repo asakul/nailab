@@ -20,4 +20,7 @@ class Executor:
                     strategy.add_feed(feed)
                 strategy.run()
 
+                results = strategy.get_analyzer('stats').get_result()
+                return results
+
 
