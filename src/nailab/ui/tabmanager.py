@@ -34,31 +34,43 @@ class TabManager(GObject.Object):
         index = self.notebook.append_page(widget, header)
         self.notebook.set_current_page(index)
 
-    def new_tab(self, source_file):
-        with open(source_file, 'r') as f:
-            tab_id = self._next_tab_id()
-            self.source_paths[tab_id] = source_file
-            (sv, sv_controller) = self._init_sourceeditor()
-            sv_controller.set_source_text(f.read())
-            self.source_controllers[tab_id] = sv_controller
-            self.widgets[tab_id] = sv
-            sv.show_all()
-            header = Gtk.HBox()
-            title_label = Gtk.Label(source_file)
-            image = Gtk.Image()
-            image.set_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
-            close_button = Gtk.Button()
-            close_button.set_image(image)
-            close_button.set_relief(Gtk.ReliefStyle.NONE)
-            close_button.connect('clicked', self.close_cb, tab_id)
+    def _read_source_file(self, source_file):
+        if source_file is not None:
+            with open(source_file, 'r') as f:
+                return f.read()
+        else:
+            return None
 
-            header.pack_start(title_label,
-                              expand=True, fill=True, padding=0)
-            header.pack_end(close_button,
-                            expand=False, fill=False, padding=0)
-            header.show_all()
-            index = self.notebook.append_page(sv, header)
-            self.notebook.set_current_page(index)
+
+    def new_tab(self, source_file):
+        tab_id = self._next_tab_id()
+        (sv, sv_controller) = self._init_sourceeditor()
+
+        source = self._read_source_file(source_file)
+        if source is not None:
+            sv_controller.set_source_text(f.read())
+
+        self.source_paths[tab_id] = source_file
+        self.source_controllers[tab_id] = sv_controller
+        self.widgets[tab_id] = sv
+        sv.show_all()
+        header = Gtk.HBox()
+        title_label = Gtk.Label(source_file)
+        image = Gtk.Image()
+        image.set_from_stock(Gtk.STOCK_CLOSE, Gtk.IconSize.MENU)
+        close_button = Gtk.Button()
+        close_button.set_image(image)
+        close_button.set_relief(Gtk.ReliefStyle.NONE)
+        close_button.connect('clicked', self.close_cb, tab_id)
+
+        header.pack_start(title_label,
+                          expand=True, fill=True, padding=0)
+        header.pack_end(close_button,
+                        expand=False, fill=False, padding=0)
+        header.show_all()
+        index = self.notebook.append_page(sv, header)
+        self.notebook.set_current_page(index)
+        return tab_id
 
     def close_cb(self, arg, tab_id):
         index = self._widget_num_by_tab_id(tab_id)
@@ -77,6 +89,10 @@ class TabManager(GObject.Object):
                 return self.source_paths[k]
 
         return None
+
+    def new_from_template(self, template):
+        tab_id = self.new_tab(None)
+        self.source_controllers[tab_id].set_source_text(template)
 
     def save_current(self):
         index = self.notebook.get_current_page()

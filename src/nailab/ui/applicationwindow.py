@@ -4,6 +4,7 @@ from gi.repository import Gtk, GtkSource
 from nailab.data.datasource import DataSource
 from nailab.data.datasourcemanager import DataSourceManager
 from nailab.execution.executor import Executor
+from nailab.templates.new_strategy import new_strategy_template
 
 from .resultstable import ResultsTableWidget
 from .tabmanager import TabManager
@@ -18,6 +19,7 @@ class ApplicationWindow:
 
         handlers = {
                 'on_ApplicationWindow_delete_event' : Gtk.main_quit,
+                'on_menuNew' : self.new_file,
                 'on_OpenFile' : self.open_file,
                 'on_menuSave' : self.save_file,
                 'on_menuSaveAs' : self.save_file_as,
@@ -26,6 +28,9 @@ class ApplicationWindow:
 
         builder.connect_signals(handlers)
         self.window.show_all()
+
+    def new_file(self, arg):
+        self.tab_manager.new_from_template(new_strategy_template)
 
     def open_file(self, arg):
         dlg = Gtk.FileChooserDialog('Open file', self.window, Gtk.FileChooserAction.OPEN,
