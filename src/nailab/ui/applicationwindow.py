@@ -23,6 +23,7 @@ class ApplicationWindow:
                 'on_OpenFile' : self.open_file,
                 'on_menuSave' : self.save_file,
                 'on_menuSaveAs' : self.save_file_as,
+                'on_menuQuit' : Gtk.main_quit,
                 'on_StrategyExecute' : self.strategy_execute
                 }
 
