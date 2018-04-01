@@ -48,7 +48,7 @@ class TabManager(GObject.Object):
 
         source = self._read_source_file(source_file)
         if source is not None:
-            sv_controller.set_source_text(f.read())
+            sv_controller.set_source_text(source)
 
         self.source_paths[tab_id] = source_file
         self.source_controllers[tab_id] = sv_controller
