@@ -71,13 +71,13 @@ class ApplicationWindow:
                 feeds.append(feed)
 
         e = Executor()
-        result = e.execute_from_file(self.tab_manager.get_current_source_path(), feeds)
+        (result, trades) = e.execute_from_file(self.tab_manager.get_current_source_path(), feeds)
 
-        self._add_results_page(result)
+        self._add_results_page(result, trades)
 
-    def _add_results_page(self, results):
+    def _add_results_page(self, results, trades):
         res_widget = ResultsTableWidget()
-        res_widget.set_results(results)
+        res_widget.set_results(results, trades)
         res_widget.show_all()
         self.tab_manager.new_misc_tab(res_widget)
 

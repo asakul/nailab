@@ -21,6 +21,7 @@ class Executor:
                 strategy.run()
 
                 results = strategy.get_analyzer('stats').get_result()
-                return results
+                trades = strategy.get_analyzer('tradeslist').get_result()
+                return (results, trades)
 
 

@@ -12,24 +12,26 @@ def render_ratio(a, b):
     else:
         return "∞"
 
-class ResultsTableWidget(Gtk.Box):
+class ResultsTableWidget(Gtk.Notebook):
 
     def __init__(self):
-        super().__init__(Gtk.Orientation.VERTICAL)
+        super().__init__()
+
+        self.set_tab_pos(Gtk.PositionType.LEFT)
 
         self.buffer = Gtk.TextBuffer()
         self.text_result = Gtk.TextView()
         self.text_result.set_buffer(self.buffer)
-        self.add(self.text_result)
+        self.append_page(self.text_result, Gtk.Label('Statistics'))
 
         style_ctx = self.text_result.get_style_context()
         self.provider = Gtk.CssProvider()
         self.provider.load_from_data(b'GtkTextView { font-family: "Monospace"; }')
         style_ctx.add_provider(self.provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
-
-    def set_results(self, results):
+    def set_results(self, results, trades):
         self.buffer.set_text(self.generate_plain_text(results))
+        print(trades)
 
     def generate_plain_text(self, stats):
 
