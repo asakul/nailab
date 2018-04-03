@@ -3,6 +3,8 @@ from gi.repository import Gtk
 
 from prettytable import PrettyTable
 
+from .equitygraph import EquityGraph
+
 def render_float(a):
     return "{:.3f}".format(a)
 
@@ -24,6 +26,9 @@ class ResultsTableWidget(Gtk.Notebook):
         self.text_result.set_buffer(self.buffer)
         self.append_page(self.text_result, Gtk.Label('Statistics'))
 
+        self.equity_graph = EquityGraph()
+        self.append_page(self.equity_graph, Gtk.Label('Equity'))
+
         style_ctx = self.text_result.get_style_context()
         self.provider = Gtk.CssProvider()
         self.provider.load_from_data(b'GtkTextView { font-family: "Monospace"; }')
@@ -31,7 +36,7 @@ class ResultsTableWidget(Gtk.Notebook):
 
     def set_results(self, results, trades):
         self.buffer.set_text(self.generate_plain_text(results))
-        print(trades)
+        self.equity_graph.set_trades(trades)
 
     def generate_plain_text(self, stats):
 
