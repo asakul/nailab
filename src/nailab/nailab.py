@@ -1,21 +1,19 @@
 
-import gi
-gi.require_version('Gtk', '3.0')
-gi.require_version('GtkSource', '3.0')
-from gi.repository import Gtk, GObject
-from gi.repository import GtkSource
-
-from nailab.ui.applicationwindow import ApplicationWindow
+import sys
+from PyQt5.QtWidgets import QApplication
+from PyQt5 import QtCore
+from ui.mainwindow import MainWindow
 
 def main():
-    GObject.type_register(GtkSource.View)
+    QApplication.setOrganizationDomain("kasan.ws")
+    QApplication.setOrganizationName("K.A.S.A.N.")
+    QApplication.setApplicationName("nailab")
+    app = QApplication(sys.argv)
 
-    builder = Gtk.Builder()
-    builder.add_from_file('ui/nailab.glade')
-
-    ApplicationWindow(builder)
-
-    Gtk.main()
+    wnd = MainWindow()
+    wnd.show()
+    
+    return app.exec_()
 
 if __name__ == '__main__':
     main()
