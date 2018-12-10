@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1050</width>
-    <height>712</height>
+    <width>1060</width>
+    <height>587</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -44,7 +44,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1050</width>
+     <width>1060</width>
      <height>23</height>
     </rect>
    </property>
@@ -65,6 +65,19 @@
    <addaction name="menuBacktest"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionSave_strategy"/>
+   <addaction name="actionExecute"/>
+  </widget>
   <action name="actionOpenTrades">
    <property name="text">
     <string>Open...</string>
@@ -83,6 +96,11 @@
   <action name="actionExecute">
    <property name="text">
     <string>Execute</string>
+   </property>
+  </action>
+  <action name="actionSave_strategy">
+   <property name="text">
+    <string>Save strategy</string>
    </property>
   </action>
  </widget>
@@ -152,6 +170,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSave_strategy</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>saveStrategy()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openTrades()</slot>
@@ -159,5 +193,6 @@
   <slot>tabCloseRequested(int)</slot>
   <slot>newStrategy()</slot>
   <slot>executeStrategy()</slot>
+  <slot>saveStrategy()</slot>
  </slots>
 </ui>

@@ -5,3 +5,5 @@ build/*
 *.pyc
 src/*.egg-info/*
 *~
+\#*
+\#*.*

@@ -11,7 +11,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1050, 712)
+        MainWindow.resize(1060, 587)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayout = QtWidgets.QGridLayout(self.centralwidget)
@@ -23,7 +23,7 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.tabs, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 1050, 23))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1060, 23))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -33,6 +33,9 @@ class Ui_MainWindow(object):
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
+        self.toolBar = QtWidgets.QToolBar(MainWindow)
+        self.toolBar.setObjectName("toolBar")
+        MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
         self.actionOpenTrades = QtWidgets.QAction(MainWindow)
         self.actionOpenTrades.setObjectName("actionOpenTrades")
         self.actionNew_strategy = QtWidgets.QAction(MainWindow)
@@ -41,11 +44,15 @@ class Ui_MainWindow(object):
         self.actionOpen_strategy.setObjectName("actionOpen_strategy")
         self.actionExecute = QtWidgets.QAction(MainWindow)
         self.actionExecute.setObjectName("actionExecute")
+        self.actionSave_strategy = QtWidgets.QAction(MainWindow)
+        self.actionSave_strategy.setObjectName("actionSave_strategy")
         self.menuFile.addAction(self.actionNew_strategy)
         self.menuFile.addAction(self.actionOpen_strategy)
         self.menuBacktest.addAction(self.actionExecute)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuBacktest.menuAction())
+        self.toolBar.addAction(self.actionSave_strategy)
+        self.toolBar.addAction(self.actionExecute)
 
         self.retranslateUi(MainWindow)
         self.tabs.setCurrentIndex(-1)
@@ -53,6 +60,7 @@ class Ui_MainWindow(object):
         self.tabs.tabCloseRequested['int'].connect(MainWindow.tabCloseRequested)
         self.actionNew_strategy.triggered.connect(MainWindow.newStrategy)
         self.actionExecute.triggered.connect(MainWindow.executeStrategy)
+        self.actionSave_strategy.triggered.connect(MainWindow.saveStrategy)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -60,8 +68,10 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "Nailab"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuBacktest.setTitle(_translate("MainWindow", "Backtest"))
+        self.toolBar.setWindowTitle(_translate("MainWindow", "toolBar"))
         self.actionOpenTrades.setText(_translate("MainWindow", "Open..."))
         self.actionNew_strategy.setText(_translate("MainWindow", "New strategy"))
         self.actionOpen_strategy.setText(_translate("MainWindow", "Open strategy"))
         self.actionExecute.setText(_translate("MainWindow", "Execute"))
+        self.actionSave_strategy.setText(_translate("MainWindow", "Save strategy"))
 

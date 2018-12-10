@@ -1,5 +1,5 @@
 
-from nailab.data.csvfolderdatasource import CsvFolderDataSource
+from data.csvfolderdatasource import CsvFolderDataSource
 
 class DataSourceManager:
 

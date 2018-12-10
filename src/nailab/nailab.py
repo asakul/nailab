@@ -1,7 +1,9 @@
+#!/usr/bin/env python3
 
 import sys
 from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtCore
+
 from ui.mainwindow import MainWindow
 
 def main():

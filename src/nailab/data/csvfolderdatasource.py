@@ -1,5 +1,5 @@
 
-from nailab.data.datasource import DataSource
+from data.datasource import DataSource
 
 from naiback.data.feeds.genericcsvfeed import GenericCSVFeed
 

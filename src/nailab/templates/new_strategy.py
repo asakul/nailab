@@ -1,6 +1,7 @@
 
 new_strategy_template = '''
 from naiback.strategy import Strategy
+from naiback.indicators import *
 
 class MyStrategy(Strategy):
 
