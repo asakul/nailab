@@ -4,6 +4,8 @@ from PyQt5.Qsci import *
 
 from ui_gen.strategywidget import Ui_StrategyWidget
 
+from ui.newdatasourcedialog import NewDataSourceDialog
+
 ROLE_FEED_ID = QtCore.Qt.UserRole + 1
 
 class StrategyWidget(QtWidgets.QWidget):
@@ -16,7 +18,10 @@ class StrategyWidget(QtWidgets.QWidget):
 
         self.source_file = source_file
 
+        s = QtCore.QSettings()
+
         self.datasourcemanager = datasourcemanager
+        self.datasourcemanager.load_sources(s)
         self.update_feeds_list()
 
         self.ui.splitter.setSizes([20, 80])
@@ -37,19 +42,48 @@ class StrategyWidget(QtWidgets.QWidget):
         self.result = []
         self.result_widget = None
 
-        s = QtCore.QSettings()
-        if s.value("time_window") is not None:
-            (from_time, to_time) = s.value("time_window")
-            self.ui.rb_timeWindow.setChecked(True)
-            self.ui.dte_from.setDateTime(from_time)
-            self.ui.dte_to.setDateTime(to_time)
+        try:
+            if s.value("time_window") is not None:
+                (from_time, to_time) = s.value("time_window")
+                self.ui.rb_timeWindow.setChecked(True)
+                self.ui.dte_from.setDateTime(from_time)
+                self.ui.dte_to.setDateTime(to_time)
+
+            self.ui.splitter.restoreState(s.value("strategy_widget_splitter_state"))
+            self.ui.splitter_editor.restoreState(s.value("strategy_widget_splitter_editor_state"))
+
+        except Exception as e:
+            print("Exception: ", e)
+
+    def addDataSource(self):
+        dlg = NewDataSourceDialog(self)
+        if dlg.exec() == QtWidgets.QDialog.Accepted:
+            self.datasourcemanager.add_source(dlg.get_data_source())
+            self.update_feeds_list()
+
+    def deleteDataSource(self):
+        selected = self.ui.tw_feeds.selectedItems()
+        for s in selected:
+            if self.ui.tw_feeds.indexOfTopLevelItem(s) >= 0:
+                name = s.data(0, ROLE_FEED_ID)
+                if name is not None:
+                    self.datasourcemanager.remove_source(name[0])
+        self.update_feeds_list()
+
+    def refreshDataSources(self):
+        self.update_feeds_list()
 
     def save_state(self):
         s = QtCore.QSettings()
+        self.datasourcemanager.save_sources(s)
         if self.ui.rb_allData.isChecked():
             s.setValue("time_window", None)
         else:
             s.setValue("time_window", (self.ui.dte_from.dateTime(), self.ui.dte_to.dateTime()))
+
+        s.setValue("strategy_widget_splitter_state", self.ui.splitter.saveState())
+        s.setValue("strategy_widget_splitter_editor_state", self.ui.splitter_editor.saveState())
+        
 
     def save(self):
         with open(self.source_file, "w") as f:
@@ -62,11 +96,12 @@ class StrategyWidget(QtWidgets.QWidget):
             return (self.ui.dte_from.dateTime(), self.ui.dte_to.dateTime())
 
     def update_feeds_list(self):
+        self.ui.tw_feeds.clear()
         sources = self.datasourcemanager.all_sources()
         for source in sources:
             src_item = QtWidgets.QTreeWidgetItem(self.ui.tw_feeds)
             src_item.setText(0, source.name)
-            src_item.setData(0, ROLE_FEED_ID, "")
+            src_item.setData(0, ROLE_FEED_ID, (source.name, ""))
             for feed in source.available_feeds():
                 feed_item = QtWidgets.QTreeWidgetItem(src_item)
                 feed_item.setText(0, feed)
@@ -155,6 +190,7 @@ class StrategyWidget(QtWidgets.QWidget):
 
         self.result_widget.resizeColumnToContents(0)
 
-
-        
+    def setError(self, errmsg):
+        self.ui.te_notes.clear()
+        self.ui.te_notes.appendPlainText(errmsg)
 

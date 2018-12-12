@@ -23,7 +23,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.sources = []
         self.datasourcemanager = DataSourceManager()
-        self.datasourcemanager.load_sources()
+        self.datasourcemanager.load_sources(QtCore.QSettings())
 
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
@@ -62,16 +62,15 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 selected_feeds.append(self.datasourcemanager.get_source(source_id).get_feed(feed_id))
             except e:
-                print('Error: ' + str(e))
+                self.ui.tabs.currentWidget().setError("Error: " + str(e))
 
         try:
             result = executor.execute_from_file(source_file, selected_feeds, self.ui.tabs.currentWidget().get_time_window())
             print(result)
             self.ui.tabs.currentWidget().set_result(result)
         except Exception as e:
-            print(e)
+            self.ui.tabs.currentWidget().setError(str(e))
             
-        
     def tabCloseRequested(self, tab_index):
         del self.sources[tab_index]
         self.ui.tabs.widget(tab_index).save_state()

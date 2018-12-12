@@ -55,6 +55,57 @@
          </property>
          <widget class="QWidget" name="gridLayoutWidget">
           <layout class="QGridLayout" name="gridLayout_2">
+           <item row="5" column="0" colspan="2">
+            <layout class="QHBoxLayout" name="horizontalLayout">
+             <item>
+              <widget class="QPushButton" name="b_addSource">
+               <property name="text">
+                <string>Add source</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="b_refresh">
+               <property name="text">
+                <string>Refresh</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+             <item>
+              <widget class="QPushButton" name="b_deleteSource">
+               <property name="text">
+                <string>Delete source</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
            <item row="3" column="1">
             <widget class="QDateTimeEdit" name="dte_to">
              <property name="displayFormat">
@@ -94,6 +145,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="contextMenuPolicy">
+              <enum>Qt::CustomContextMenu</enum>
+             </property>
              <property name="selectionMode">
               <enum>QAbstractItemView::MultiSelection</enum>
              </property>
@@ -129,19 +183,25 @@
            </item>
           </layout>
          </widget>
-         <widget class="QsciScintilla" name="editor" native="true">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
+         <widget class="QSplitter" name="splitter_editor">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
           </property>
-          <property name="minimumSize">
-           <size>
-            <width>300</width>
-            <height>0</height>
-           </size>
-          </property>
+          <widget class="QsciScintilla" name="editor" native="true">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="minimumSize">
+            <size>
+             <width>300</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+          <widget class="QPlainTextEdit" name="te_notes"/>
          </widget>
         </widget>
        </item>
@@ -160,5 +220,59 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>b_addSource</sender>
+   <signal>clicked()</signal>
+   <receiver>StrategyWidget</receiver>
+   <slot>addDataSource()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>73</x>
+     <y>553</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>90</x>
+     <y>568</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_deleteSource</sender>
+   <signal>clicked()</signal>
+   <receiver>StrategyWidget</receiver>
+   <slot>deleteDataSource()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>393</x>
+     <y>551</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>363</x>
+     <y>568</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>b_refresh</sender>
+   <signal>clicked()</signal>
+   <receiver>StrategyWidget</receiver>
+   <slot>refreshDataSources()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>201</x>
+     <y>545</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>225</x>
+     <y>569</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>addDataSource()</slot>
+  <slot>deleteDataSource()</slot>
+  <slot>refreshDataSources()</slot>
+ </slots>
 </ui>

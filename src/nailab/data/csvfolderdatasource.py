@@ -11,9 +11,18 @@ class CsvFolderDataSource(DataSource):
     def __init__(self, name, path):
         super().__init__(name)
 
+        self.type = "csv"
+
         self.path = path
         self.feeds = []
         self._discover_feeds()
+
+    @classmethod
+    def deserialize(self, data):
+        return CsvFolderDataSource(data[0], data[1])
+
+    def serialize(self):
+        return (self.name, self.path)
 
     def available_feeds(self):
         return [f[1] for f in self.feeds]
