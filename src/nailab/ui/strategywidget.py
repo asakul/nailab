@@ -1,5 +1,6 @@
 
 import os.path
+import numpy as np
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.Qsci import *
@@ -7,6 +8,7 @@ from PyQt5.Qsci import *
 from ui_gen.strategywidget import Ui_StrategyWidget
 
 from ui.newdatasourcedialog import NewDataSourceDialog
+from ui.equitychartwidget import EquityChartWidget
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -55,6 +57,7 @@ class StrategyWidget(QtWidgets.QWidget):
 
         self.result = []
         self.result_widget = None
+        self.equity_widget = None
 
         self.watchdog_handler = FileModifiedHandler(self.file_modified)
         self.watchdog = None
@@ -135,7 +138,18 @@ class StrategyWidget(QtWidgets.QWidget):
     def set_result(self, result):
         self.result = result
         self.update_result()
+        self.update_equity_chart()
 
+
+    def update_equity_chart(self):
+        pnl = [x['pnl'] for x in self.result[1]]
+        cumpnl = np.cumsum(pnl)
+        if self.equity_widget is None:
+            self.equity_widget = EquityChartWidget(self)
+            self.ui.tabs.addTab(self.equity_widget, "Equity")
+
+        self.equity_widget.set_data(cumpnl)
+        
 
     def update_result(self):
         if self.result_widget is None:
