@@ -3,6 +3,8 @@ import os
 import importlib
 import importlib.util
 import inspect
+import sys
+import traceback
 
 from execution.executor import Executor
 from data.datasourcemanager import DataSourceManager
@@ -62,14 +64,13 @@ class MainWindow(QtWidgets.QMainWindow):
             try:
                 selected_feeds.append(self.datasourcemanager.get_source(source_id).get_feed(feed_id))
             except e:
-                self.ui.tabs.currentWidget().setError("Error: " + str(e))
+                self.ui.tabs.currentWidget().setError(traceback.format_exc())
 
         try:
             result = executor.execute_from_file(source_file, selected_feeds, self.ui.tabs.currentWidget().get_time_window())
-            print(result)
             self.ui.tabs.currentWidget().set_result(result)
         except Exception as e:
-            self.ui.tabs.currentWidget().setError(str(e))
+            self.ui.tabs.currentWidget().setError(traceback.format_exc())
             
     def tabCloseRequested(self, tab_index):
         del self.sources[tab_index]
