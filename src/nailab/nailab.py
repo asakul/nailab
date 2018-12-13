@@ -5,6 +5,7 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5 import QtCore
 
 from ui.mainwindow import MainWindow
+import nailab_rc
 
 def main():
     QApplication.setOrganizationDomain("kasan.ws")

@@ -1,4 +1,6 @@
 
+import sys
+import importlib
 from importlib.machinery import SourceFileLoader
 import inspect
 
@@ -10,6 +12,8 @@ class Executor:
         pass
 
     def execute_from_file(self, path, feeds, extents=None):
+        if "execution._current_strategy" in sys.modules:
+            del sys.modules["execution._current_strategy"]
         loader = SourceFileLoader('execution._current_strategy', path)
         mod = loader.load_module()
         for item in inspect.getmembers(mod, inspect.isclass):
