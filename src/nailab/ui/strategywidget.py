@@ -1,4 +1,6 @@
 
+import os.path
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.Qsci import *
 
@@ -6,7 +8,19 @@ from ui_gen.strategywidget import Ui_StrategyWidget
 
 from ui.newdatasourcedialog import NewDataSourceDialog
 
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
 ROLE_FEED_ID = QtCore.Qt.UserRole + 1
+
+class FileModifiedHandler(FileSystemEventHandler):
+    def __init__(self, callback):
+        super().__init__()
+        self.callback = callback
+
+    def on_modified(self, event):
+        self.callback(event.src_path)
+        
 
 class StrategyWidget(QtWidgets.QWidget):
 
@@ -41,6 +55,10 @@ class StrategyWidget(QtWidgets.QWidget):
 
         self.result = []
         self.result_widget = None
+
+        self.watchdog_handler = FileModifiedHandler(self.file_modified)
+        self.watchdog = None
+        self.update_watchdog()
 
         try:
             if s.value("time_window") is not None:
@@ -194,3 +212,22 @@ class StrategyWidget(QtWidgets.QWidget):
         self.ui.te_notes.clear()
         self.ui.te_notes.appendPlainText(errmsg)
 
+    def update_watchdog(self):
+        if self.watchdog is not None:
+            self.watchdog.stop()
+            self.watchdog.join()
+
+        if self.source_file is not None:
+            self.watchdog = Observer()
+            self.watchdog.schedule(self.watchdog_handler, os.path.dirname(self.source_file), recursive=False)
+            self.watchdog.start()
+
+    def file_modified(self, fname):
+        try:
+            if self.source_file is not None and os.path.samefile(self.source_file, fname):
+                with open(self.source_file, "r") as f:
+                    self.ui.editor.setText(f.read())
+        except:
+            # Saving file from the outside generates a lot of events, as temporary and backup files are created and removed.
+            # Hence, we ignore errors
+            pass
