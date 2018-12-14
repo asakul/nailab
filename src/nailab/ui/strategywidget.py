@@ -9,6 +9,7 @@ from ui_gen.strategywidget import Ui_StrategyWidget
 
 from ui.newdatasourcedialog import NewDataSourceDialog
 from ui.equitychartwidget import EquityChartWidget
+from ui.tradeslistwidget import TradesListWidget
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -58,6 +59,7 @@ class StrategyWidget(QtWidgets.QWidget):
         self.result = []
         self.result_widget = None
         self.equity_widget = None
+        self.trades_widget = None
 
         self.watchdog_handler = FileModifiedHandler(self.file_modified)
         self.watchdog = None
@@ -139,6 +141,7 @@ class StrategyWidget(QtWidgets.QWidget):
         self.result = result
         self.update_result()
         self.update_equity_chart()
+        self.update_trades_list()
 
 
     def update_equity_chart(self):
@@ -149,6 +152,13 @@ class StrategyWidget(QtWidgets.QWidget):
             self.ui.tabs.addTab(self.equity_widget, "Equity")
 
         self.equity_widget.set_data(cumpnl)
+
+    def update_trades_list(self):
+        if self.trades_widget is None:
+            self.trades_widget = TradesListWidget(self)
+            self.ui.tabs.addTab(self.trades_widget, "Trades")
+
+        self.trades_widget.set_trades(self.result[1])
         
 
     def update_result(self):
