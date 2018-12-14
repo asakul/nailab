@@ -30,8 +30,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
 
-    def openTrades(self):
-        pass
+    def savedChanged(self):
+        for i in range(0, self.ui.tabs.count()):
+            print(i, self.ui.tabs.widget(i).is_saved())
+            self.update_tab_name(i)
 
     def newStrategy(self):
         self._makeEditor(content=new_strategy_template)
@@ -43,6 +45,13 @@ class MainWindow(QtWidgets.QMainWindow):
             with open(filename, "r") as f:
                 self._makeEditor(filename, os.path.basename(filename), f.read())
                 settings.setValue("open_strategy_path", os.path.dirname(filename))
+
+    def update_tab_name(self, index):
+        tabname = os.path.basename(self.ui.tabs.widget(index).source_file)
+        if not self.ui.tabs.widget(index).is_saved():
+            tabname += " *"
+            
+        self.ui.tabs.setTabText(index, tabname)
 
     def saveStrategy(self):
         settings = QtCore.QSettings()
@@ -81,4 +90,5 @@ class MainWindow(QtWidgets.QMainWindow):
         editor = StrategyWidget(self.datasourcemanager, source_file, self, content)
         self.sources.append(source_file)
         self.ui.tabs.addTab(editor, tab_name)
+        editor.savedChanged.connect(self.savedChanged)
         

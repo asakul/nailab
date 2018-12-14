@@ -1,5 +1,6 @@
 
 import os.path
+import datetime
 import numpy as np
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -27,13 +28,18 @@ class FileModifiedHandler(FileSystemEventHandler):
 
 class StrategyWidget(QtWidgets.QWidget):
 
+    savedChanged = QtCore.pyqtSignal(name="savedChanged")
+
     def __init__(self, datasourcemanager, source_file, parent=None, content=None):
         super().__init__(parent)
 
         self.ui = Ui_StrategyWidget()
         self.ui.setupUi(self)
 
-        self.source_file = source_file
+        self.saved = False
+        self.save_timestamp = datetime.datetime.now()
+
+        self.ui.editor.textChanged.connect(self.editorTextChanged)
 
         s = QtCore.QSettings()
 
@@ -50,6 +56,11 @@ class StrategyWidget(QtWidgets.QWidget):
         self.ui.editor.setFont(font)
         if content is not None:
             self.ui.editor.setText(content)
+
+        self.source_file = source_file
+        if self.source_file is not None:
+            self.saved = True
+
 
         lexer = QsciLexerPython()
         lexer.setFont(font)
@@ -77,6 +88,15 @@ class StrategyWidget(QtWidgets.QWidget):
 
         except Exception as e:
             print("Exception: ", e)
+
+    def is_saved(self):
+        return self.saved
+
+    def editorTextChanged(self):
+        saved = self.saved
+        self.saved = False
+        if saved:
+            self.savedChanged.emit()
 
     def addDataSource(self):
         dlg = NewDataSourceDialog(self)
@@ -109,8 +129,13 @@ class StrategyWidget(QtWidgets.QWidget):
         
 
     def save(self):
+        self.save_timestamp = datetime.datetime.now()
         with open(self.source_file, "w") as f:
             f.write(self.ui.editor.text())
+            saved = self.saved
+            self.saved = True
+            if not saved:
+                self.savedChanged.emit()
 
     def get_time_window(self):
         if self.ui.rb_allData.isChecked():
@@ -248,9 +273,10 @@ class StrategyWidget(QtWidgets.QWidget):
 
     def file_modified(self, fname):
         try:
-            if self.source_file is not None and os.path.samefile(self.source_file, fname):
-                with open(self.source_file, "r") as f:
-                    self.ui.editor.setText(f.read())
+            if datetime.datetime.now() - self.save_timestamp > datetime.timedelta(seconds=2):
+                if self.source_file is not None and os.path.samefile(self.source_file, fname):
+                    with open(self.source_file, "r") as f:
+                        self.ui.editor.setText(f.read())
         except:
             # Saving file from the outside generates a lot of events, as temporary and backup files are created and removed.
             # Hence, we ignore errors
