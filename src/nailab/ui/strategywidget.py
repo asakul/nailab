@@ -57,6 +57,10 @@ class StrategyWidget(QtWidgets.QWidget):
         if content is not None:
             self.ui.editor.setText(content)
 
+        self.ui.editor.setIndentationsUseTabs(False)
+        self.ui.editor.setTabWidth(4)
+        self.ui.editor.setAutoIndent(True)
+
         self.source_file = source_file
         if self.source_file is not None:
             self.saved = True

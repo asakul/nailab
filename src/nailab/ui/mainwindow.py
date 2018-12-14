@@ -32,7 +32,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def savedChanged(self):
         for i in range(0, self.ui.tabs.count()):
-            print(i, self.ui.tabs.widget(i).is_saved())
             self.update_tab_name(i)
 
     def newStrategy(self):
