@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'ui\tradeslistwidget.ui'
+# Form implementation generated from reading ui file 'ui/tradeslistwidget.ui'
 #
-# Created by: PyQt5 UI code generator 5.11.3
+# Created by: PyQt5 UI code generator 5.5.1
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -26,10 +26,11 @@ class Ui_TradesListWidget(object):
         _translate = QtCore.QCoreApplication.translate
         TradesListWidget.setWindowTitle(_translate("TradesListWidget", "Form"))
         self.trades.headerItem().setText(0, _translate("TradesListWidget", "D"))
-        self.trades.headerItem().setText(1, _translate("TradesListWidget", "Security"))
-        self.trades.headerItem().setText(2, _translate("TradesListWidget", "Entry time"))
-        self.trades.headerItem().setText(3, _translate("TradesListWidget", "Entry price"))
-        self.trades.headerItem().setText(4, _translate("TradesListWidget", "Exit time"))
-        self.trades.headerItem().setText(5, _translate("TradesListWidget", "Exit price"))
-        self.trades.headerItem().setText(6, _translate("TradesListWidget", "PnL"))
+        self.trades.headerItem().setText(1, _translate("TradesListWidget", "Amount"))
+        self.trades.headerItem().setText(2, _translate("TradesListWidget", "Security"))
+        self.trades.headerItem().setText(3, _translate("TradesListWidget", "Entry time"))
+        self.trades.headerItem().setText(4, _translate("TradesListWidget", "Entry price"))
+        self.trades.headerItem().setText(5, _translate("TradesListWidget", "Exit time"))
+        self.trades.headerItem().setText(6, _translate("TradesListWidget", "Exit price"))
+        self.trades.headerItem().setText(7, _translate("TradesListWidget", "PnL"))
 
