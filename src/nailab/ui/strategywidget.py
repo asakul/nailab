@@ -141,6 +141,17 @@ class StrategyWidget(QtWidgets.QWidget):
             if not saved:
                 self.savedChanged.emit()
 
+    def save_as(self, source_file):
+        self.source_file = source_file
+        self.save_timestamp = datetime.datetime.now()
+        with open(self.source_file, "w") as f:
+            f.write(self.ui.editor.text())
+            saved = self.saved
+            self.saved = True
+            if not saved:
+                self.savedChanged.emit()
+        
+
     def get_time_window(self):
         if self.ui.rb_allData.isChecked():
             return None
@@ -151,6 +162,7 @@ class StrategyWidget(QtWidgets.QWidget):
         self.ui.tw_feeds.clear()
         sources = self.datasourcemanager.all_sources()
         for source in sources:
+            source.refresh()
             src_item = QtWidgets.QTreeWidgetItem(self.ui.tw_feeds)
             src_item.setText(0, source.name)
             src_item.setData(0, ROLE_FEED_ID, (source.name, ""))

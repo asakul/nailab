@@ -65,7 +65,7 @@ class Ui_StrategyWidget(object):
         sizePolicy.setHeightForWidth(self.tw_feeds.sizePolicy().hasHeightForWidth())
         self.tw_feeds.setSizePolicy(sizePolicy)
         self.tw_feeds.setContextMenuPolicy(QtCore.Qt.CustomContextMenu)
-        self.tw_feeds.setSelectionMode(QtWidgets.QAbstractItemView.MultiSelection)
+        self.tw_feeds.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
         self.tw_feeds.setHeaderHidden(True)
         self.tw_feeds.setObjectName("tw_feeds")
         self.tw_feeds.headerItem().setText(0, "1")

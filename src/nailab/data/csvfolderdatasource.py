@@ -27,6 +27,9 @@ class CsvFolderDataSource(DataSource):
     def available_feeds(self):
         return [f[1] for f in self.feeds]
 
+    def refresh(self):
+        self._discover_feeds()
+
     def get_feed(self, feed_id):
         for path, f_id in self.feeds:
             if f_id == feed_id:

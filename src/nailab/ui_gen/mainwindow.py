@@ -60,9 +60,12 @@ class Ui_MainWindow(object):
         self.actionSave_strategy.setObjectName("actionSave_strategy")
         self.actionExit = QtWidgets.QAction(MainWindow)
         self.actionExit.setObjectName("actionExit")
+        self.actionSave_as = QtWidgets.QAction(MainWindow)
+        self.actionSave_as.setObjectName("actionSave_as")
         self.menuFile.addAction(self.actionNew_strategy)
         self.menuFile.addAction(self.actionOpen_strategy)
         self.menuFile.addAction(self.actionSave_strategy)
+        self.menuFile.addAction(self.actionSave_as)
         self.menuFile.addAction(self.actionExit)
         self.menuBacktest.addAction(self.actionExecute)
         self.menubar.addAction(self.menuFile.menuAction())
@@ -80,6 +83,7 @@ class Ui_MainWindow(object):
         self.actionNew_strategy.triggered.connect(MainWindow.newStrategy)
         self.actionExecute.triggered.connect(MainWindow.executeStrategy)
         self.actionSave_strategy.triggered.connect(MainWindow.saveStrategy)
+        self.actionSave_as.triggered.connect(MainWindow.saveStrategyAs)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -97,5 +101,6 @@ class Ui_MainWindow(object):
         self.actionSave_strategy.setText(_translate("MainWindow", "Save strategy"))
         self.actionSave_strategy.setShortcut(_translate("MainWindow", "Ctrl+S"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
+        self.actionSave_as.setText(_translate("MainWindow", "Save as..."))
 
 import nailab_rc

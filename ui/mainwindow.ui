@@ -55,6 +55,7 @@
     <addaction name="actionNew_strategy"/>
     <addaction name="actionOpen_strategy"/>
     <addaction name="actionSave_strategy"/>
+    <addaction name="actionSave_as"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuBacktest">
@@ -136,6 +137,11 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionSave_as">
+   <property name="text">
+    <string>Save as...</string>
    </property>
   </action>
  </widget>
@@ -223,6 +229,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSave_as</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>saveStrategyAs()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openTrades()</slot>
@@ -231,5 +253,6 @@
   <slot>newStrategy()</slot>
   <slot>executeStrategy()</slot>
   <slot>saveStrategy()</slot>
+  <slot>saveStrategyAs()</slot>
  </slots>
 </ui>

@@ -58,10 +58,22 @@ class MainWindow(QtWidgets.QMainWindow):
         if currentWidget.source_file is None:
             currentWidget.source_file = QtWidgets.QFileDialog.getSaveFileName(self, self.tr("Select a file..."), settings.value("save_strategy_path"), self.tr("Python (*.py);;All (*.*, *)"))[0]
             if currentWidget.source_file != "":
+                if not currentWidget.source_file.endswith(".py"):
+                    currentWidget.source_file += ".py"
                 settings.setValue("save_strategy_path", os.path.dirname(currentWidget.source_file))
                 self.ui.tabs.setTabText(self.ui.tabs.currentIndex(), os.path.basename(currentWidget.source_file))
         if currentWidget.source_file != "":
             currentWidget.save()
+
+    def saveStrategyAs(self):
+        settings = QtCore.QSettings()
+        currentWidget = self.ui.tabs.currentWidget()
+        new_source_file = QtWidgets.QFileDialog.getSaveFileName(self, self.tr("Select a file..."), settings.value("save_strategy_path"), self.tr("Python (*.py);;All (*.*, *)"))[0]
+        if new_source_file != "":
+            settings.setValue("save_strategy_path", os.path.dirname(currentWidget.source_file))
+            self.ui.tabs.setTabText(self.ui.tabs.currentIndex(), os.path.basename(currentWidget.source_file))
+            currentWidget.save_as(new_source_file)
+        
 
     def executeStrategy(self):
         source_file = self.ui.tabs.currentWidget().source_file
@@ -71,7 +83,7 @@ class MainWindow(QtWidgets.QMainWindow):
         for (source_id, feed_id) in selected_feed_ids:
             try:
                 selected_feeds.append(self.datasourcemanager.get_source(source_id).get_feed(feed_id))
-            except e:
+            except Exception as e:
                 self.ui.tabs.currentWidget().setError(traceback.format_exc())
 
         try:
