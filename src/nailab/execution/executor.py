@@ -30,6 +30,7 @@ class Executor:
 
                 results = strategy.get_analyzer('stats').get_result()
                 trades = strategy.get_analyzer('tradeslist').get_result()
-                return (results, trades)
+                equity = strategy.get_analyzer('equity').get_result()
+                return (results, trades, equity)
 
 
