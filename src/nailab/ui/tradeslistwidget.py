@@ -30,8 +30,8 @@ class TradesListWidget(QtWidgets.QWidget):
             item.setText(1, str(trade["size"]))
             item.setText(2, trade["security"])
             item.setText(3, str(trade["entry_time"]))
-            item.setText(4, "{:.2f}".format(trade["entry_price"]))
+            item.setText(4, "{:.4f}".format(trade["entry_price"]))
             item.setText(5, str(trade["exit_time"]))
-            item.setText(6, "{:.2f}".format(trade["exit_price"]))
-            item.setText(7, "{:.2f}".format(trade["pnl"]))
+            item.setText(6, "{:.4f}".format(trade["exit_price"]))
+            item.setText(7, "{:.4f}".format(trade["pnl"]))
 
