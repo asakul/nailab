@@ -186,13 +186,22 @@ class StrategyWidget(QtWidgets.QWidget):
 
 
     def update_equity_chart(self):
-        #pnl = [x['pnl'] for x in self.result[1]]
-        #cumpnl = np.cumsum(pnl)
+        pnl = [x['pnl'] for x in self.result[1]]
+        cumpnl = np.cumsum(pnl)
+        drawdown = []
+        cur_max = 0
+        for i in range(0, len(cumpnl)):
+            if cumpnl[i] > cur_max:
+                cur_max = cumpnl[i]
+                drawdown.append(0)
+            else:
+                drawdown.append(-(cur_max - cumpnl[i]))
         if self.equity_widget is None:
             self.equity_widget = EquityChartWidget(self)
             self.ui.tabs.addTab(self.equity_widget, "Equity")
 
-        self.equity_widget.set_data(self.result[2])
+        #self.equity_widget.set_data(self.result[2])
+        self.equity_widget.set_data(cumpnl, np.array(drawdown))
 
     def update_trades_list(self):
         if self.trades_widget is None:

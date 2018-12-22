@@ -12,5 +12,5 @@ class EquityChartWidget(QtWidgets.QWidget):
         self.ui.setupUi(self)
 
 
-    def set_data(self, pnl):
-        self.ui.chart.set_data(pnl)
+    def set_data(self, pnl, drawdown):
+        self.ui.chart.set_data(pnl, drawdown)
