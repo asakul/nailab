@@ -35,3 +35,11 @@ class TradesListWidget(QtWidgets.QWidget):
             item.setText(6, "{:.4f}".format(trade["exit_price"]))
             item.setText(7, "{:.4f}".format(trade["pnl"]))
 
+            if trade["pnl"] > 0:
+                brush = QtGui.QBrush(QtGui.QColor(180, 255, 180))
+            else:
+                brush = QtGui.QBrush(QtGui.QColor(255, 180, 180))
+                
+            for i in range(0, 8):
+                item.setBackground(i, brush)
+
