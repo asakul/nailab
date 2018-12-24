@@ -238,6 +238,12 @@ class StrategyWidget(QtWidgets.QWidget):
         lost_trades.setText(2, "{:d}".format(self.result[0]['short']['lost']))
         lost_trades.setText(3, "{:d}".format(self.result[0]['all']['lost']))
 
+        won_percentage = QtWidgets.QTreeWidgetItem(self.result_widget)
+        won_percentage.setText(0, "% profitable")
+        won_percentage.setText(1, "{:.2f}".format(100 * self._ratio(self.result[0]['long']['won'], self.result[0]['long']['won'] + self.result[0]['long']['lost'])))
+        won_percentage.setText(2, "{:.2f}".format(100 * self._ratio(self.result[0]['short']['won'], self.result[0]['short']['won'] + self.result[0]['short']['lost'])))
+        won_percentage.setText(3, "{:.2f}".format(100 * self._ratio(self.result[0]['all']['won'], self.result[0]['all']['won'] + self.result[0]['all']['lost'])))
+
         net_profit = QtWidgets.QTreeWidgetItem(self.result_widget)
         net_profit.setText(0, "Net profit")
         net_profit.setText(1, "{:.3f}".format(self.result[0]['long']['net_profit']))
@@ -306,3 +312,10 @@ class StrategyWidget(QtWidgets.QWidget):
             # Saving file from the outside generates a lot of events, as temporary and backup files are created and removed.
             # Hence, we ignore errors
             pass
+
+
+    def _ratio(self, a, b):
+        if b == 0:
+            return 0
+        else:
+            return float(a) / b
