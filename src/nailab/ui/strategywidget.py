@@ -55,7 +55,8 @@ class StrategyWidget(QtWidgets.QWidget):
         font.setPointSize(10)
         self.ui.editor.setFont(font)
         if content is not None:
-            self.ui.editor.setText(content)
+            fixed_content = "\n".join(content.splitlines())
+            self.ui.editor.setText(fixed_content)
 
         self.ui.editor.setIndentationsUseTabs(False)
         self.ui.editor.setTabWidth(4)
