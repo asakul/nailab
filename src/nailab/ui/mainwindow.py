@@ -89,6 +89,7 @@ class MainWindow(QtWidgets.QMainWindow):
         try:
             result = executor.execute_from_file(source_file, selected_feeds, self.ui.tabs.currentWidget().get_time_window())
             self.ui.tabs.currentWidget().set_result(result)
+            self.ui.tabs.currentWidget().setError(self.tr("Successful run"))
         except Exception as e:
             self.ui.tabs.currentWidget().setError(traceback.format_exc())
             
