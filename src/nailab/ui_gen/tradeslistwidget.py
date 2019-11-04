@@ -15,16 +15,23 @@ class Ui_TradesListWidget(object):
         self.gridLayout = QtWidgets.QGridLayout(TradesListWidget)
         self.gridLayout.setContentsMargins(1, 1, 1, 1)
         self.gridLayout.setObjectName("gridLayout")
+        self.b_exportToFile = QtWidgets.QPushButton(TradesListWidget)
+        self.b_exportToFile.setObjectName("b_exportToFile")
+        self.gridLayout.addWidget(self.b_exportToFile, 1, 0, 1, 1)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.gridLayout.addItem(spacerItem, 1, 1, 1, 1)
         self.trades = QtWidgets.QTreeWidget(TradesListWidget)
         self.trades.setObjectName("trades")
-        self.gridLayout.addWidget(self.trades, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.trades, 0, 0, 1, 2)
 
         self.retranslateUi(TradesListWidget)
+        self.b_exportToFile.clicked.connect(TradesListWidget.exportToFile)
         QtCore.QMetaObject.connectSlotsByName(TradesListWidget)
 
     def retranslateUi(self, TradesListWidget):
         _translate = QtCore.QCoreApplication.translate
         TradesListWidget.setWindowTitle(_translate("TradesListWidget", "Form"))
+        self.b_exportToFile.setText(_translate("TradesListWidget", "Export to file..."))
         self.trades.headerItem().setText(0, _translate("TradesListWidget", "D"))
         self.trades.headerItem().setText(1, _translate("TradesListWidget", "Amount"))
         self.trades.headerItem().setText(2, _translate("TradesListWidget", "Security"))

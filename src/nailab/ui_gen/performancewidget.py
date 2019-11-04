@@ -1,0 +1,100 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'ui/performancewidget.ui'
+#
+# Created by: PyQt5 UI code generator 5.5.1
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+class Ui_PerformanceWidget(object):
+    def setupUi(self, PerformanceWidget):
+        PerformanceWidget.setObjectName("PerformanceWidget")
+        PerformanceWidget.resize(780, 556)
+        self.gridLayout = QtWidgets.QGridLayout(PerformanceWidget)
+        self.gridLayout.setContentsMargins(2, 2, 2, 2)
+        self.gridLayout.setObjectName("gridLayout")
+        self.tab1 = QtWidgets.QTabWidget(PerformanceWidget)
+        self.tab1.setObjectName("tab1")
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName("tab")
+        self.gridLayout_2 = QtWidgets.QGridLayout(self.tab)
+        self.gridLayout_2.setContentsMargins(1, 1, 1, 1)
+        self.gridLayout_2.setObjectName("gridLayout_2")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setContentsMargins(4, 4, 4, 4)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.canvas = PerformanceCanvas(self.tab)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.canvas.sizePolicy().hasHeightForWidth())
+        self.canvas.setSizePolicy(sizePolicy)
+        self.canvas.setObjectName("canvas")
+        self.verticalLayout.addWidget(self.canvas)
+        self.tw_stats = QtWidgets.QTreeWidget(self.tab)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Maximum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.tw_stats.sizePolicy().hasHeightForWidth())
+        self.tw_stats.setSizePolicy(sizePolicy)
+        self.tw_stats.setObjectName("tw_stats")
+        self.tw_stats.header().setVisible(False)
+        self.verticalLayout.addWidget(self.tw_stats)
+        self.gridLayout_2.addLayout(self.verticalLayout, 0, 0, 1, 1)
+        self.tab1.addTab(self.tab, "")
+        self.tab_2 = QtWidgets.QWidget()
+        self.tab_2.setObjectName("tab_2")
+        self.gridLayout_3 = QtWidgets.QGridLayout(self.tab_2)
+        self.gridLayout_3.setObjectName("gridLayout_3")
+        self.rb_daily = QtWidgets.QRadioButton(self.tab_2)
+        self.rb_daily.setChecked(True)
+        self.rb_daily.setObjectName("rb_daily")
+        self.gridLayout_3.addWidget(self.rb_daily, 0, 0, 1, 1)
+        self.rb_monthly = QtWidgets.QRadioButton(self.tab_2)
+        self.rb_monthly.setObjectName("rb_monthly")
+        self.gridLayout_3.addWidget(self.rb_monthly, 0, 1, 1, 1)
+        self.correlationCanvas = CorrelationChartCanvas(self.tab_2)
+        self.correlationCanvas.setObjectName("correlationCanvas")
+        self.gridLayout_3.addWidget(self.correlationCanvas, 1, 0, 1, 2)
+        self.tab1.addTab(self.tab_2, "")
+        self.gridLayout.addWidget(self.tab1, 0, 2, 1, 1)
+        self.b_add = QtWidgets.QPushButton(PerformanceWidget)
+        self.b_add.setObjectName("b_add")
+        self.gridLayout.addWidget(self.b_add, 1, 0, 1, 1)
+        self.b_remove = QtWidgets.QPushButton(PerformanceWidget)
+        self.b_remove.setObjectName("b_remove")
+        self.gridLayout.addWidget(self.b_remove, 1, 1, 1, 1)
+        self.lw_strategies = QtWidgets.QListWidget(PerformanceWidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.lw_strategies.sizePolicy().hasHeightForWidth())
+        self.lw_strategies.setSizePolicy(sizePolicy)
+        self.lw_strategies.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.lw_strategies.setObjectName("lw_strategies")
+        self.gridLayout.addWidget(self.lw_strategies, 0, 0, 1, 2)
+
+        self.retranslateUi(PerformanceWidget)
+        self.tab1.setCurrentIndex(1)
+        self.b_add.clicked.connect(PerformanceWidget.addResults)
+        self.b_remove.clicked.connect(PerformanceWidget.removeResults)
+        self.rb_daily.toggled['bool'].connect(PerformanceWidget.dailyToggled)
+        self.rb_monthly.toggled['bool'].connect(PerformanceWidget.monthlyToggled)
+        QtCore.QMetaObject.connectSlotsByName(PerformanceWidget)
+
+    def retranslateUi(self, PerformanceWidget):
+        _translate = QtCore.QCoreApplication.translate
+        PerformanceWidget.setWindowTitle(_translate("PerformanceWidget", "Form"))
+        self.tw_stats.headerItem().setText(0, _translate("PerformanceWidget", "1"))
+        self.tw_stats.headerItem().setText(1, _translate("PerformanceWidget", "2"))
+        self.tab1.setTabText(self.tab1.indexOf(self.tab), _translate("PerformanceWidget", "Returns and Drawdowns"))
+        self.rb_daily.setText(_translate("PerformanceWidget", "Daily"))
+        self.rb_monthly.setText(_translate("PerformanceWidget", "Monthly"))
+        self.tab1.setTabText(self.tab1.indexOf(self.tab_2), _translate("PerformanceWidget", "Correlations"))
+        self.b_add.setText(_translate("PerformanceWidget", "Add..."))
+        self.b_remove.setText(_translate("PerformanceWidget", "Remove"))
+
+from ui.correlationchartcanvas import CorrelationChartCanvas
+from ui.performancecanvas import PerformanceCanvas

@@ -94,6 +94,9 @@ class StrategyWidget(QtWidgets.QWidget):
         except Exception as e:
             print("Exception: ", e)
 
+    def widget_type(self):
+        return "strategy"
+
     def is_saved(self):
         return self.saved
 
@@ -191,18 +194,29 @@ class StrategyWidget(QtWidgets.QWidget):
         cumpnl = np.cumsum(pnl)
         drawdown = []
         cur_max = 0
+        drawdown_lengths = []
+        cur_drawdown = 0
+        cur_drawdown_max = 0
         for i in range(0, len(cumpnl)):
             if cumpnl[i] > cur_max:
                 cur_max = cumpnl[i]
                 drawdown.append(0)
+                if cur_drawdown > 0:
+                    drawdown_lengths.append((cur_drawdown, cur_drawdown_max))
+                cur_drawdown = 0
+                cur_drawdown_max = 0
             else:
                 drawdown.append(-(cur_max - cumpnl[i]))
+                cur_drawdown += 1
+                cur_drawdown_max = max(cur_drawdown_max, cur_max - cumpnl[i])
         if self.equity_widget is None:
             self.equity_widget = EquityChartWidget(self)
             self.ui.tabs.addTab(self.equity_widget, "Equity")
 
         #self.equity_widget.set_data(self.result[2])
         self.equity_widget.set_data(cumpnl, np.array(drawdown))
+
+        print(drawdown_lengths)
 
     def update_trades_list(self):
         if self.trades_widget is None:
@@ -286,6 +300,18 @@ class StrategyWidget(QtWidgets.QWidget):
         profit_factor.setText(1, "{:.3f}".format(self.result[0]['long']['profit_factor']))
         profit_factor.setText(2, "{:.3f}".format(self.result[0]['short']['profit_factor']))
         profit_factor.setText(3, "{:.3f}".format(self.result[0]['all']['profit_factor']))
+
+        sharpe_ratio = QtWidgets.QTreeWidgetItem(self.result_widget)
+        sharpe_ratio.setText(0, "Sharpe ratio")
+        sharpe_ratio.setText(1, "{:.3f}".format(self.result[0]['long']['sharpe_ratio']))
+        sharpe_ratio.setText(2, "{:.3f}".format(self.result[0]['short']['sharpe_ratio']))
+        sharpe_ratio.setText(3, "{:.3f}".format(self.result[0]['all']['sharpe_ratio']))
+
+        t_stat = QtWidgets.QTreeWidgetItem(self.result_widget)
+        t_stat.setText(0, "t-statistics")
+        t_stat.setText(1, "{:.3f}".format(self.result[0]['long']['t_stat']))
+        t_stat.setText(2, "{:.3f}".format(self.result[0]['short']['t_stat']))
+        t_stat.setText(3, "{:.3f}".format(self.result[0]['all']['t_stat']))
 
         self.result_widget.resizeColumnToContents(0)
 

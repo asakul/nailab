@@ -7,6 +7,7 @@ import sys
 import traceback
 
 from execution.executor import Executor
+from execution.portfolioexecutor import PortfolioExecutor
 from data.datasourcemanager import DataSourceManager
 
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -14,6 +15,7 @@ from PyQt5.Qsci import *
 
 from ui_gen.mainwindow import Ui_MainWindow
 from ui.strategywidget import StrategyWidget
+from ui.performancewidget import PerformanceWidget
 
 from naiback.strategy import Strategy
 from templates.new_strategy import new_strategy_template
@@ -23,7 +25,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
-        self.sources = []
         self.datasourcemanager = DataSourceManager()
         self.datasourcemanager.load_sources(QtCore.QSettings())
 
@@ -92,15 +93,34 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.tabs.currentWidget().setError(self.tr("Successful run"))
         except Exception as e:
             self.ui.tabs.currentWidget().setError(traceback.format_exc())
+
+    def executeStrategyInPortfolioMode(self):
+        source_file = self.ui.tabs.currentWidget().source_file
+        executor = PortfolioExecutor()
+        selected_feed_ids = self.ui.tabs.currentWidget().get_selected_feeds()
+        selected_feeds = []
+        for (source_id, feed_id) in selected_feed_ids:
+            try:
+                selected_feeds.append(self.datasourcemanager.get_source(source_id).get_feed(feed_id))
+            except Exception as e:
+                self.ui.tabs.currentWidget().setError(traceback.format_exc())
+
+        try:
+            result = executor.execute_from_file(source_file, selected_feeds, self.ui.tabs.currentWidget().get_time_window())
+            self.ui.tabs.currentWidget().set_result(result)
+            self.ui.tabs.currentWidget().setError(self.tr("Successful run"))
+        except Exception as e:
+            self.ui.tabs.currentWidget().setError(traceback.format_exc())
             
     def tabCloseRequested(self, tab_index):
-        del self.sources[tab_index]
-        self.ui.tabs.widget(tab_index).save_state()
+        if self.ui.tabs.widget(tab_index).widget_type() == "strategy":
+            self.ui.tabs.widget(tab_index).save_state()
         self.ui.tabs.removeTab(tab_index)
+
+    def performanceAnalysis(self):
+        self.ui.tabs.addTab(PerformanceWidget(), self.tr("Performance analysis"))
 
     def _makeEditor(self, source_file=None, tab_name="Untitled", content=None):
         editor = StrategyWidget(self.datasourcemanager, source_file, self, content)
-        self.sources.append(source_file)
         self.ui.tabs.addTab(editor, tab_name)
         editor.savedChanged.connect(self.savedChanged)
-        

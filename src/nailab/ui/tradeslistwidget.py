@@ -4,6 +4,9 @@ from PyQt5.Qsci import *
 
 from ui_gen.tradeslistwidget import Ui_TradesListWidget
 
+import json
+import math
+
 class TradesListWidget(QtWidgets.QWidget):
 
     def __init__(self, parent=None):
@@ -42,4 +45,25 @@ class TradesListWidget(QtWidgets.QWidget):
                 
             for i in range(0, 8):
                 item.setBackground(i, brush)
+
+    def exportToFile(self):
+        filename, _ = QtWidgets.QFileDialog.getSaveFileName(None, self.tr("Select output file"), "", self.tr("JSON files (*.json);;All Files (*)"))
+        with open(filename, "wt") as f:
+            output = []
+            for trade in self.trades:
+                if trade["is_long"]:
+                    p = 100.0 * (trade["exit_price"] / trade["entry_price"] - 1)
+                    log_ret = math.log(trade["exit_price"] / trade["entry_price"])
+                else:
+                    p = 100.0 * (trade["entry_price"] / trade["exit_price"] - 1)
+                    log_ret = math.log(trade["entry_price"] / trade["exit_price"])
+                t = { "pnl" : trade["pnl"],
+                      "percentage" : p,
+                      "log_return" : log_ret,
+                      "entry_time" : trade["entry_time"].strftime("%Y-%m-%d %H:%M:%S"),
+                      "exit_time" : trade["exit_time"].strftime("%Y-%m-%d %H:%M:%S") }
+                output.append(t)
+            f.write(json.dumps(output, indent=4, sort_keys=True))
+
+            
 

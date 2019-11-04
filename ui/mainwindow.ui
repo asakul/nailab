@@ -64,8 +64,15 @@
     </property>
     <addaction name="actionExecute"/>
    </widget>
+   <widget class="QMenu" name="menuAnalysis">
+    <property name="title">
+     <string>Analysis</string>
+    </property>
+    <addaction name="actionPerformance"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuBacktest"/>
+   <addaction name="menuAnalysis"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolBar">
@@ -83,6 +90,7 @@
    <addaction name="actionSave_strategy"/>
    <addaction name="separator"/>
    <addaction name="actionExecute"/>
+   <addaction name="actionExecute_in_Portfolio_Mode"/>
   </widget>
   <action name="actionOpenTrades">
    <property name="text">
@@ -142,6 +150,20 @@
   <action name="actionSave_as">
    <property name="text">
     <string>Save as...</string>
+   </property>
+  </action>
+  <action name="actionPerformance">
+   <property name="text">
+    <string>Performance</string>
+   </property>
+  </action>
+  <action name="actionExecute_in_Portfolio_Mode">
+   <property name="icon">
+    <iconset resource="../nailab.qrc">
+     <normaloff>:/main/icons/execute.png</normaloff>:/main/icons/execute.png</iconset>
+   </property>
+   <property name="text">
+    <string>Execute in Portfolio Mode</string>
    </property>
   </action>
  </widget>
@@ -245,6 +267,38 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionPerformance</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>performanceAnalysis()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExecute_in_Portfolio_Mode</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>executeStrategyInPortfolioMode()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openTrades()</slot>
@@ -254,5 +308,7 @@
   <slot>executeStrategy()</slot>
   <slot>saveStrategy()</slot>
   <slot>saveStrategyAs()</slot>
+  <slot>performanceAnalysis()</slot>
+  <slot>executeStrategyInPortfolioMode()</slot>
  </slots>
 </ui>
