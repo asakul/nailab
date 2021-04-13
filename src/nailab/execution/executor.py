@@ -3,6 +3,7 @@ import sys
 import importlib
 from importlib.machinery import SourceFileLoader
 import inspect
+from PyQt5 import QtCore
 
 from naiback.strategy import Strategy
 
@@ -23,6 +24,9 @@ class Executor:
                 for feed in feeds:
                     strategy.add_feed(feed)
 
+                (commission_percentage, commission_per_share) = self.load_commissions()
+
+                strategy.broker.set_commission(commission_percentage, commission_per_share)
                 if extents is None:
                     strategy.run()
                 else:
@@ -34,3 +38,9 @@ class Executor:
                 return (results, trades, equity)
 
 
+
+    def load_commissions(self):
+        s = QtCore.QSettings()
+
+        return (float(s.value("commission/percentage", 0)), float(s.value("commission/per_share", 0)))
+        

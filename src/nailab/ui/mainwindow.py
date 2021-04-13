@@ -16,6 +16,7 @@ from PyQt5.Qsci import *
 from ui_gen.mainwindow import Ui_MainWindow
 from ui.strategywidget import StrategyWidget
 from ui.performancewidget import PerformanceWidget
+from ui.settingswindow import SettingsWindow
 
 from naiback.strategy import Strategy
 from templates.new_strategy import new_strategy_template
@@ -116,6 +117,12 @@ class MainWindow(QtWidgets.QMainWindow):
         if self.ui.tabs.widget(tab_index).widget_type() == "strategy":
             self.ui.tabs.widget(tab_index).save_state()
         self.ui.tabs.removeTab(tab_index)
+
+    def showSettingsDialog(self):
+        dlg = SettingsWindow(self)
+        dlg.exec()
+        if dlg.result() == QtWidgets.QDialog.Accepted:
+            dlg.saveSettings()
 
     def performanceAnalysis(self):
         self.ui.tabs.addTab(PerformanceWidget(), self.tr("Performance analysis"))

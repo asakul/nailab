@@ -54,18 +54,28 @@ class PortfolioExecutor:
         all_trades = list(sorted(trades1 + trades2, key=lambda x: x['entry_time']))
         result = []
         current_trades = []
+        # TODO customize
+        size_per_position = 1000000
+        cash = 1000000
         max_trades = 3
         for trade in all_trades:
             if len(current_trades) < max_trades:
+                size = math.floor(size_per_position / (trade['entry_price'] * max_trades))
+                cash -= size * trade['entry_price']
+                trade['size'] = size
+                if trade['is_long']:
+                    trade['pnl'] = size * (trade['exit_price'] - trade['entry_price'])
+                else:
+                    trade['pnl'] = -size * (trade['exit_price'] - trade['entry_price'])
                 current_trades.append(trade)
                 result.append(trade)
             new_current_trades = []
+
             for ct in current_trades:
                 if ct['exit_time'] < trade['entry_time']:
                     new_current_trades.append(ct)
                 else:
-                    # possibly adjust the balance
-                    pass
+                    cash += ct['size'] * ct['exit_price']
             current_trades = new_current_trades
         return result
                     
@@ -89,6 +99,10 @@ class PortfolioExecutor:
         result['all']['number_of_trades'] = len(trades)
         result['long']['number_of_trades'] = len(longs)
         result['short']['number_of_trades'] = len(shorts)
+
+        result['all']['total_commission'] = 0 # TODO
+        result['long']['total_commission'] = 0
+        result['short']['total_commission'] = 0
 
         result['all']['avg'] = render_ratio(result['all']['net_profit'], result['all']['number_of_trades'])
         result['long']['avg'] = render_ratio(result['long']['net_profit'], result['long']['number_of_trades'])
@@ -126,22 +140,25 @@ class PortfolioExecutor:
         stddev = np.std(list(map(lambda x: x['pnl'], trades)))
         sharpe = mean / stddev
         tstat = sharpe * math.sqrt(len(trades))
-        result['all']['sharpe_ratio'] = sharpe
+        result['all']['z_score'] = sharpe
         result['all']['t_stat'] = tstat
+        result['all']['kelly'] = 0
 
         mean = np.mean(list(map(lambda x: x['pnl'], longs)))
         stddev = np.std(list(map(lambda x: x['pnl'], longs)))
         sharpe = mean / stddev
         tstat = sharpe * math.sqrt(len(longs))
-        result['long']['sharpe_ratio'] = sharpe
+        result['long']['z_score'] = sharpe
         result['long']['t_stat'] = tstat
+        result['long']['kelly'] = 0
 
         mean = np.mean(list(map(lambda x: x['pnl'], shorts)))
         stddev = np.std(list(map(lambda x: x['pnl'], shorts)))
         sharpe = mean / stddev
         tstat = sharpe * math.sqrt(len(shorts))
-        result['short']['sharpe_ratio'] = sharpe
+        result['short']['z_score'] = sharpe
         result['short']['t_stat'] = tstat
+        result['short']['kelly'] = 0
 
         return result
 

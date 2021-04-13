@@ -1,5 +1,6 @@
 
 from data.csvfolderdatasource import CsvFolderDataSource
+from data.yahoocsvfolderdatasource import YahooCsvFolderDataSource
 
 class DataSourceManager:
 
@@ -19,6 +20,8 @@ class DataSourceManager:
             for s in serialized:
                 if s[0] == "csv":
                     self.add_source(CsvFolderDataSource.deserialize(s[1]))
+                if s[0] == "yahoo_csv":
+                    self.add_source(YahooCsvFolderDataSource.deserialize(s[1]))
 
     def add_source(self, source):
         self.sources.append(source)

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1060</width>
-    <height>587</height>
+    <height>588</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -45,7 +45,7 @@
      <x>0</x>
      <y>0</y>
      <width>1060</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -91,6 +91,7 @@
    <addaction name="separator"/>
    <addaction name="actionExecute"/>
    <addaction name="actionExecute_in_Portfolio_Mode"/>
+   <addaction name="actionSettings"/>
   </widget>
   <action name="actionOpenTrades">
    <property name="text">
@@ -164,6 +165,11 @@
    </property>
    <property name="text">
     <string>Execute in Portfolio Mode</string>
+   </property>
+  </action>
+  <action name="actionSettings">
+   <property name="text">
+    <string>Settings</string>
    </property>
   </action>
  </widget>
@@ -299,6 +305,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSettings</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showSettingsDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>293</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openTrades()</slot>
@@ -310,5 +332,6 @@
   <slot>saveStrategyAs()</slot>
   <slot>performanceAnalysis()</slot>
   <slot>executeStrategyInPortfolioMode()</slot>
+  <slot>showSettingsDialog()</slot>
  </slots>
 </ui>

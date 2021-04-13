@@ -6,6 +6,7 @@ from ui_gen.newdatasourcedialog import Ui_NewDataSourceDialog
 from ui.csvdatasourceconfigwidget import CSVDataSourceConfigWidget
 
 from data.csvfolderdatasource import CsvFolderDataSource
+from data.yahoocsvfolderdatasource import YahooCsvFolderDataSource
 
 class NewDataSourceDialog(QtWidgets.QDialog):
 
@@ -19,6 +20,7 @@ class NewDataSourceDialog(QtWidgets.QDialog):
         self.ui.widgets.setCurrentIndex(index)
 
     def get_data_source(self):
-        return CsvFolderDataSource(self.ui.e_sourceName.text(), self.ui.widgets.currentWidget().ui.e_path.text())
-
-    
+        if self.ui.cb_sourceType.currentText() == "CSV":
+            return CsvFolderDataSource(self.ui.e_sourceName.text(), self.ui.widgets.currentWidget().ui.e_path.text())
+        else:
+            return YahooCsvFolderDataSource(self.ui.e_sourceName.text(), self.ui.widgets.currentWidget().ui.e_path.text())

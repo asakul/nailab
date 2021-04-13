@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>977</width>
-    <height>569</height>
+    <height>666</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -55,7 +55,19 @@
          </property>
          <widget class="QWidget" name="gridLayoutWidget">
           <layout class="QGridLayout" name="gridLayout_2">
-           <item row="5" column="0" colspan="2">
+           <property name="leftMargin">
+            <number>2</number>
+           </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
+           <property name="rightMargin">
+            <number>2</number>
+           </property>
+           <property name="bottomMargin">
+            <number>2</number>
+           </property>
+           <item row="7" column="0" colspan="2">
             <layout class="QHBoxLayout" name="horizontalLayout">
              <item>
               <widget class="QPushButton" name="b_addSource">
@@ -106,24 +118,24 @@
              </item>
             </layout>
            </item>
-           <item row="3" column="1">
-            <widget class="QDateTimeEdit" name="dte_to">
-             <property name="displayFormat">
-              <string>dd.MM.yyyy H:mm</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
+           <item row="4" column="1">
             <widget class="QDateTimeEdit" name="dte_from">
              <property name="displayFormat">
               <string>dd.MM.yyyy H:mm</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
+           <item row="5" column="0">
             <widget class="QLabel" name="label_2">
              <property name="text">
               <string>To</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="QDateTimeEdit" name="dte_to">
+             <property name="displayFormat">
+              <string>dd.MM.yyyy H:mm</string>
              </property>
             </widget>
            </item>
@@ -137,7 +149,7 @@
              </property>
             </widget>
            </item>
-           <item row="4" column="0" colspan="2">
+           <item row="6" column="0" colspan="2">
             <widget class="QTreeWidget" name="tw_feeds">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -161,7 +173,7 @@
              </column>
             </widget>
            </item>
-           <item row="2" column="0">
+           <item row="4" column="0">
             <widget class="QLabel" name="label">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Maximum" vsizetype="Preferred">

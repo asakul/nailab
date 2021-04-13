@@ -11,6 +11,7 @@ from ui_gen.strategywidget import Ui_StrategyWidget
 from ui.newdatasourcedialog import NewDataSourceDialog
 from ui.equitychartwidget import EquityChartWidget
 from ui.tradeslistwidget import TradesListWidget
+from ui.statisticwidget import StatisticWidget
 
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -76,6 +77,7 @@ class StrategyWidget(QtWidgets.QWidget):
         self.result_widget = None
         self.equity_widget = None
         self.trades_widget = None
+        self.statistic_widget = None
 
         self.watchdog_handler = FileModifiedHandler(self.file_modified)
         self.watchdog = None
@@ -223,8 +225,12 @@ class StrategyWidget(QtWidgets.QWidget):
             self.trades_widget = TradesListWidget(self)
             self.ui.tabs.addTab(self.trades_widget, "Trades")
 
+        if self.statistic_widget is None:
+            self.statistic_widget = StatisticWidget(self)
+            self.ui.tabs.addTab(self.statistic_widget, "Statistic")
+
         self.trades_widget.set_trades(self.result[1])
-        
+        self.statistic_widget.set_trades(self.result[1])
 
     def update_result(self):
         if self.result_widget is None:
@@ -265,6 +271,12 @@ class StrategyWidget(QtWidgets.QWidget):
         net_profit.setText(2, "{:.3f}".format(self.result[0]['short']['net_profit']))
         net_profit.setText(3, "{:.3f}".format(self.result[0]['all']['net_profit']))
 
+        total_commission = QtWidgets.QTreeWidgetItem(self.result_widget)
+        total_commission.setText(0, "Total commission")
+        total_commission.setText(1, "{:.3f}".format(self.result[0]['long']['total_commission']))
+        total_commission.setText(2, "{:.3f}".format(self.result[0]['short']['total_commission']))
+        total_commission.setText(3, "{:.3f}".format(self.result[0]['all']['total_commission']))
+
         total_won = QtWidgets.QTreeWidgetItem(self.result_widget)
         total_won.setText(0, "Total won")
         total_won.setText(1, "{:.3f}".format(self.result[0]['long']['total_won']))
@@ -302,16 +314,22 @@ class StrategyWidget(QtWidgets.QWidget):
         profit_factor.setText(3, "{:.3f}".format(self.result[0]['all']['profit_factor']))
 
         sharpe_ratio = QtWidgets.QTreeWidgetItem(self.result_widget)
-        sharpe_ratio.setText(0, "Sharpe ratio")
-        sharpe_ratio.setText(1, "{:.3f}".format(self.result[0]['long']['sharpe_ratio']))
-        sharpe_ratio.setText(2, "{:.3f}".format(self.result[0]['short']['sharpe_ratio']))
-        sharpe_ratio.setText(3, "{:.3f}".format(self.result[0]['all']['sharpe_ratio']))
+        sharpe_ratio.setText(0, "Z-score")
+        sharpe_ratio.setText(1, "{:.3f}".format(self.result[0]['long']['z_score']))
+        sharpe_ratio.setText(2, "{:.3f}".format(self.result[0]['short']['z_score']))
+        sharpe_ratio.setText(3, "{:.3f}".format(self.result[0]['all']['z_score']))
 
         t_stat = QtWidgets.QTreeWidgetItem(self.result_widget)
         t_stat.setText(0, "t-statistics")
         t_stat.setText(1, "{:.3f}".format(self.result[0]['long']['t_stat']))
         t_stat.setText(2, "{:.3f}".format(self.result[0]['short']['t_stat']))
         t_stat.setText(3, "{:.3f}".format(self.result[0]['all']['t_stat']))
+
+        kelly = QtWidgets.QTreeWidgetItem(self.result_widget)
+        kelly.setText(0, "Kelly ratio")
+        kelly.setText(1, "{:.1f}%".format(100. * self.result[0]['long']['kelly']))
+        kelly.setText(2, "{:.1f}%".format(100. * self.result[0]['short']['kelly']))
+        kelly.setText(3, "{:.1f}%".format(100. * self.result[0]['all']['kelly']))
 
         self.result_widget.resizeColumnToContents(0)
 
